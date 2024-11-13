@@ -12,8 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Cargar mensajes desde localStorage
     const mensajesGuardados = JSON.parse(localStorage.getItem('mensajes')) || [];
     mensajesGuardados.forEach(mensaje => {
-        const nuevoMensaje = crearElementoMensaje(mensaje.nombre, mensaje.mensaje, mensaje.fecha);
-        mensajesContainer[mensaje.tipo].appendChild(nuevoMensaje);
+        agregarMensajePorMes(mensaje);
     });
 
     // Evento para enviar mensaje
@@ -28,18 +27,38 @@ document.addEventListener('DOMContentLoaded', function() {
         const fechaHora = new Date().toLocaleString();
 
         // Guardar mensaje en localStorage
-        mensajesGuardados.push({ nombre, mensaje, fecha: fechaHora, tipo });
+        const mensajeData = { nombre, mensaje, fecha: fechaHora, tipo };
+        mensajesGuardados.push(mensajeData);
         localStorage.setItem('mensajes', JSON.stringify(mensajesGuardados));
 
         // Crear el mensaje y añadir al contenedor correspondiente
-        const nuevoMensaje = crearElementoMensaje(nombre, mensaje, fechaHora);
-        if (mensajesContainer[tipo]) {
-            mensajesContainer[tipo].appendChild(nuevoMensaje);
-        }
+        agregarMensajePorMes(mensajeData);
 
         // Resetear el formulario
         document.getElementById('mensajeForm').reset();
     });
+
+    // Función para agregar mensaje agrupado por mes
+    function agregarMensajePorMes(mensajeData) {
+        const { nombre, mensaje, fecha, tipo } = mensajeData;
+
+        // Obtener el mes y el año
+        const fechaObj = new Date(fecha);
+        const mesAnio = fechaObj.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+        // Crear o seleccionar la sección del mes correspondiente
+        let mesContainer = document.querySelector(`#${tipo} .mes-${mesAnio}`);
+        if (!mesContainer) {
+            mesContainer = document.createElement('div');
+            mesContainer.classList.add(`mes-${mesAnio}`);
+            mesContainer.innerHTML = `<h3>${mesAnio}</h3>`;
+            mensajesContainer[tipo].appendChild(mesContainer);
+        }
+
+        // Crear el mensaje y añadir al contenedor del mes correspondiente
+        const nuevoMensaje = crearElementoMensaje(nombre, mensaje, fecha);
+        mesContainer.appendChild(nuevoMensaje);
+    }
 
     // Función para crear un mensaje
     function crearElementoMensaje(nombre, mensaje, fecha) {
