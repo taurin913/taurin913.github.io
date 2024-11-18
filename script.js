@@ -1,100 +1,12 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const mensajesContainer = {
-        examen: document.getElementById('examenes'),
-        trabajo: document.getElementById('trabajos'),
-        normal: document.getElementById('normales'),
-    };
+// Función para mostrar u ocultar el calendario
+function toggleCalendario() {
+    const calendarioDiv = document.getElementById('calendario');
+    calendarioDiv.style.display = (calendarioDiv.style.display === 'none' || calendarioDiv.style.display === '') 
+        ? 'block' 
+        : 'none';
+}
 
-    // Cargar mensajes desde localStorage
-    const mensajesGuardados = JSON.parse(localStorage.getItem('mensajes')) || [];
-    mensajesGuardados.forEach(mensaje => {
-        agregarMensajePorMes(mensaje.nombre, mensaje.mensaje, mensaje.fecha, mensaje.tipo);
-    });
-
-    // Evento para enviar mensaje
-    document.getElementById('mensajeForm').addEventListener('submit', function (event) {
-        event.preventDefault();
-
-        const nombre = document.getElementById('nombre').value;
-        const mensaje = document.getElementById('mensaje').value;
-        const tipo = document.getElementById('tipoMensaje').value;
-
-        // Obtener fecha y hora actuales en formato ISO
-        const fecha = new Date();
-        const fechaISO = fecha.toISOString(); // Fecha en formato ISO
-        const mesAño = `${fecha.toLocaleString('default', { month: 'long' })} ${fecha.getFullYear()}`;
-
-        // Guardar mensaje en localStorage
-        mensajesGuardados.push({ nombre, mensaje, fecha: fechaISO, tipo });
-        localStorage.setItem('mensajes', JSON.stringify(mensajesGuardados));
-
-        // Añadir el mensaje al contenedor correspondiente
-        agregarMensajePorMes(nombre, mensaje, fechaISO, tipo);
-
-        // Resetear el formulario
-        document.getElementById('mensajeForm').reset();
-    });
-
-    // Función para agregar mensaje por mes
-    function agregarMensajePorMes(nombre, mensaje, fechaISO, tipo) {
-        const fecha = new Date(fechaISO);
-        const mesAño = `${fecha.toLocaleString('default', { month: 'long' })} ${fecha.getFullYear()}`;
-        const idMesAño = mesAño.replace(/\s/g, '-').toLowerCase(); // Crear un ID único (ej. "noviembre-2024")
-    
-        // Seleccionar el contenedor del tipo de mensaje
-        const contenedorTipo = mensajesContainer[tipo];
-        if (!contenedorTipo) return;
-    
-        // Crear o seleccionar el contenedor del mes dentro del tipo
-        let contenedorMes = contenedorTipo.querySelector(`[data-mes="${mesAño}"]`);
-        if (!contenedorMes) {
-            contenedorMes = document.createElement('div');
-            contenedorMes.dataset.mes = mesAño;
-            contenedorMes.id = idMesAño; // Asignar el ID único al divisor
-            contenedorMes.innerHTML = `<h4>${mesAño}</h4>`;
-            contenedorTipo.appendChild(contenedorMes);
-        }
-    
-        // Crear el mensaje
-        const nuevoMensaje = crearElementoMensaje(nombre, mensaje, fecha.toLocaleString());
-        contenedorMes.appendChild(nuevoMensaje);
-    }    
-
-    // Función para crear un mensaje
-    function crearElementoMensaje(nombre, mensaje, fecha) {
-        const nuevoMensaje = document.createElement('div');
-        nuevoMensaje.classList.add('mensaje');
-
-        nuevoMensaje.innerHTML = `
-            <strong>${nombre}</strong>: ${mensaje} <em>(${fecha})</em>
-            <button class="eliminar-mensaje" style="margin-left: 10px;">Eliminar</button>
-        `;
-
-        // Agregar evento para eliminar mensaje
-        nuevoMensaje.querySelector('.eliminar-mensaje').addEventListener('click', function () {
-            eliminarMensaje(nuevoMensaje, nombre, mensaje, fecha);
-        });
-
-        return nuevoMensaje;
-    }
-
-    // Función para eliminar un mensaje
-    function eliminarMensaje(elementoMensaje, nombre, mensaje, fecha) {
-        // Eliminar el mensaje del DOM
-        elementoMensaje.remove();
-
-        // Eliminar mensaje del localStorage
-        const mensajesGuardados = JSON.parse(localStorage.getItem('mensajes')) || [];
-        const mensajesActualizados = mensajesGuardados.filter(m =>
-            !(m.nombre === nombre && m.mensaje === mensaje && new Date(m.fecha).toLocaleString() === fecha)
-        );
-
-        localStorage.setItem('mensajes', JSON.stringify(mensajesActualizados));
-    }
-});
-
-
-// 7. Calendario - Configuración de FullCalendar
+// Configuración de FullCalendar
 document.addEventListener('DOMContentLoaded', function() {
     const calendarioEl = document.getElementById('calendario');
 
@@ -124,7 +36,6 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         events: cargarEventos(),
         eventDidMount: function(info) {
-            // Crear botón de eliminar para eventos
             const deleteBtn = document.createElement('button');
             deleteBtn.innerHTML = 'X';
             deleteBtn.classList.add('delete-event-btn');
@@ -140,26 +51,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
     calendar.render();
 
-    // 8. Función para guardar eventos en localStorage
     function guardarEvento(evento) {
         const eventosGuardados = JSON.parse(localStorage.getItem('eventos')) || [];
         eventosGuardados.push(evento);
         localStorage.setItem('eventos', JSON.stringify(eventosGuardados));
     }
 
-    // 9. Función para eliminar eventos de localStorage
     function eliminarEvento(evento) {
         let eventosGuardados = JSON.parse(localStorage.getItem('eventos')) || [];
         eventosGuardados = eventosGuardados.filter(e => e.title !== evento.title || e.start !== evento.startStr);
         localStorage.setItem('eventos', JSON.stringify(eventosGuardados));
     }
 
-    // 10. Función para cargar eventos desde localStorage al calendario
     function cargarEventos() {
         return JSON.parse(localStorage.getItem('eventos')) || [];
     }
 });
-
 
 //jueguito de la serpiente
 const canvas = document.getElementById("gameCanvas");
