@@ -75,46 +75,66 @@
   <ul>
   <li> <a href="indexasignatura.html">Más sobre la asignatura</a></li>
   <li> <a href="indexobjetivos.html">Objetivos</a> </li>
-  <li><a href="indexchat.html">Ayuda brindada por chat gpt</a> </li>
   <li><a href="http://iesclaudiosanchezalbornoz.centros.educa.jcyl.es/sitio/">Web del instituto</text> </li>
   <li><a href="https://www.educa.jcyl.es/es">Web de educacyl</a> </li>
   <li> <a href="indexsnake.html">Jueguito </a> </li>
   </ul>
 </div>
 
-<form id="mensajeForm">
-  <input type="text" id="nombre" placeholder="Nombre" required>
-  <input type="email" id="email" placeholder="Email" required>
-  <select id="tipoMensaje" required>
-    <option value="">Selecciona tipo de mensaje</option>
-    <option value="examen">Exámenes</option>
-    <option value="trabajo">Trabajos</option>
-    <option value="normal">Mensaje Normal</option>
-  </select>
-  <textarea id="mensaje" placeholder="Mensaje" required></textarea>
-  <button type="submit">Enviar</button>
-</form>
-
-<div id="mensajesContainer">
-  <h2>Exámenes</h2>
-  <div id="examenes"></div>
-  <h2>Trabajos</h2>
-  <div id="trabajos"></div>
-  <h2>Mensajes Normales</h2>
-  <div id="normales"></div>
-</div>
-
-<div id="mensajesPorMes">
-  <!-- Aquí se generarán las secciones mensuales -->
-</div>
-
-
 </div>
 
 <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css' rel='stylesheet' />
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js'></script>
 
-<div id='calendario'></div>
+   <button onclick="toggleCalendario()">Mostrar/Ocultar Calendario</button>
+
+    <div id="calendario"></div>
+
+    <script>
+        // Función para mostrar u ocultar el calendario
+        function toggleCalendario() {
+            const calendarioDiv = document.getElementById('calendario');
+            if (calendarioDiv.style.display === 'none') {
+                calendarioDiv.style.display = 'block';
+                generarCalendario(); // Genera el calendario si está oculto
+            } else {
+                calendarioDiv.style.display = 'none';
+            }
+        }
+
+<div id='noviembre-2024'>
+    <h3>Exámenes</h3>
+    <ul>
+        <li>5 de noviembre: Examen de biología</li>
+        <li>11 de noviembre: Examen de Platón</li>
+        <li>12 de noviembre: Comentario de texto de Platón</li>
+        <li>21 de noviembre: Examen de Aristóteles</li>
+        <li>22 de noviembre: Examen de inglés</li>
+        <li>25 de noviembre: Comentario de texto de Aristóteles</li>
+        <li>28 de noviembre: Comentario de texto de lengua</li>
+        <li>29 de noviembre: Examen de matemáticas</li>
+    </ul>
+    <h3>Trabajos</h3>
+    <ul>
+        <li>25 de noviembre: Trabajo de historia</li>
+    </ul>
+</div>
+
+<div id='diciembre-2024'>
+    <h3>Exámenes</h3>
+    <ul>
+        <li>2 de diciembre: Examen de TIC</li>
+        <li>5 de diciembre: Examen de historia</li>
+    </ul>
+    <h3>Trabajos</h3>
+    <ul>
+        <li>1 de diciembre: Trabajo de las lenguas</li>
+    </ul>
+</div>
+
+<div id='enero-2025'>
+    <!-- Agrega aquí los eventos de enero si tienes alguno -->
+</div>
 
 <div class="pie">
   <p>&copy; 2024 - I.E.S. Claudio Sánchez Albornoz</p>
